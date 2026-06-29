@@ -1,0 +1,23 @@
+# Maven build output
+target/
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# Logs & generated reports
+*.log
+report.csv
+kourio_report*.csv
+
+# Local artifacts (deps resolved via Maven; SRS kept as .docx)
+libs/
+*.pages
+AGENTS.md
