@@ -8,6 +8,7 @@ import com.kourio.daos.UserDAO;
 import com.kourio.daos.ServiceDAO;
 import com.kourio.daos.AppointmentDAO;
 import com.kourio.daos.AuditLogDAO;
+import com.kourio.services.BookingRules;
 import com.kourio.views.MainFrame;
 import com.kourio.views.CustomerDashboardView;
 
@@ -17,7 +18,6 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.Normalizer;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -420,7 +420,7 @@ public class CustomerController {
                 return;
             }
 
-            // Cancellation Business Rule: at least 2 hours before
+            // Cancellation Business Rule (SRS §3.3.2): ο κανόνας ζει στην BookingRules (unit-tested)
             LocalDateTime appDateTime = LocalDateTime.of(selected.getAppointmentDate(), selected.getStartTime());
             LocalDateTime now = LocalDateTime.now();
 
@@ -429,8 +429,7 @@ public class CustomerController {
                 return;
             }
 
-            long minutesRemaining = Duration.between(now, appDateTime).toMinutes();
-            if (minutesRemaining < 120) {
+            if (!BookingRules.canCancel(now, appDateTime)) {
                 JOptionPane.showMessageDialog(view, "Άρνηση Ακύρωσης: Οι ακυρώσεις επιτρέπονται μόνο έως και 2 ώρες πριν το ραντεβού.");
                 return;
             }

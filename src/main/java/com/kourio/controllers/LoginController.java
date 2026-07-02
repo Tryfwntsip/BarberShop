@@ -3,6 +3,7 @@ package com.kourio.controllers;
 import com.kourio.models.User;
 import com.kourio.daos.UserDAO;
 import com.kourio.daos.AuditLogDAO;
+import com.kourio.services.BookingRules;
 import com.kourio.views.MainFrame;
 import com.kourio.views.LoginView;
 import org.mindrot.jbcrypt.BCrypt;
@@ -101,13 +102,13 @@ public class LoginController {
                     int failed = user.getFailedLogins() + 1;
                     user.setFailedLogins(failed);
 
-                    if (failed >= 5) {
+                    if (BookingRules.shouldLockAccount(failed)) {
                         user.setLockedUntil(LocalDateTime.now().plusMinutes(5));
                         auditLogDAO.logEvent(username, "ACCOUNT_LOCKOUT", "127.0.0.1");
                         loginView.setErrorMessage("Υπερβήκατε το όριο δοκιμών. Κλείδωμα για 5 λεπτά.");
                     } else {
                         auditLogDAO.logEvent(username, "LOGIN_FAILURE_WRONG_PASSWORD", "127.0.0.1");
-                        int remaining = 5 - failed;
+                        int remaining = BookingRules.MAX_FAILED_LOGINS - failed;
                         loginView.setErrorMessage("Λανθασμένος κωδικός. Απομένουν " + remaining + " προσπάθειες.");
                     }
                     userDAO.updateUser(user);

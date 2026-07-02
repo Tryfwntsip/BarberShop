@@ -5,6 +5,7 @@ import com.kourio.models.AppointmentStatus;
 import com.kourio.models.Service;
 import com.kourio.models.User;
 import com.kourio.models.Role;
+import com.kourio.services.BookingRules;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -168,7 +169,7 @@ public class AppointmentDAO {
                 if (rs.next()) {
                     LocalTime workStart = rs.getTime("working_hours_start").toLocalTime();
                     LocalTime workEnd = rs.getTime("working_hours_end").toLocalTime();
-                    if (startTime.isBefore(workStart) || endTime.isAfter(workEnd)) {
+                    if (!BookingRules.withinWorkingHours(startTime, durationMinutes, workStart, workEnd)) {
                         return false; // Out of working hours
                     }
                 } else {
@@ -189,8 +190,8 @@ public class AppointmentDAO {
                     LocalTime bookedStart = rs.getTime("start_time").toLocalTime();
                     LocalTime bookedEnd = rs.getTime("end_time").toLocalTime();
 
-                    // Overlap check: start1 < end2 AND start2 < end1
-                    if (startTime.isBefore(bookedEnd) && bookedStart.isBefore(endTime)) {
+                    // Overlap check (κανόνας στην BookingRules ώστε να είναι unit-testable)
+                    if (BookingRules.overlaps(startTime, endTime, bookedStart, bookedEnd)) {
                         return false; // Overlap detected
                     }
                 }
@@ -352,15 +353,9 @@ public class AppointmentDAO {
                     stats.put("noShowBookings", noshow);
                     stats.put("totalRevenue", revenue);
 
-                    // Average revenue = revenue / completed
-                    BigDecimal avgRevenue = completed > 0 
-                        ? revenue.divide(BigDecimal.valueOf(completed), 2, java.math.RoundingMode.HALF_UP) 
-                        : BigDecimal.ZERO;
-                    stats.put("avgRevenue", avgRevenue);
-
-                    // No-show rate = (noShow / total) * 100
-                    double noShowRate = total > 0 ? ((double) noshow / total) * 100 : 0.0;
-                    stats.put("noShowRate", noShowRate);
+                    // Υπολογισμοί KPI μέσω BookingRules (unit-tested)
+                    stats.put("avgRevenue", BookingRules.averageRevenue(revenue, completed));
+                    stats.put("noShowRate", BookingRules.noShowRate(noshow, total));
                 }
             }
         }

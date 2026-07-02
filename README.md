@@ -33,6 +33,7 @@ export KOURIO_DB_PASSWORD="ο_κωδικός_σου"
 ### 3. Build & Run
 ```bash
 mvn compile
+mvn test        # unit tests (JUnit 5) — δεν απαιτούν βάση δεδομένων
 mvn dependency:build-classpath -Dmdep.outputFile=cp.txt
 java -cp "target/classes:$(cat cp.txt)" com.kourio.views.MainFrame
 ```
