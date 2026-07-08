@@ -22,10 +22,18 @@ public class LoginController {
     private final AuditLogDAO auditLogDAO;
 
     public LoginController(MainFrame mainFrame, LoginView loginView) {
+        this(mainFrame, loginView, new UserDAO(), new AuditLogDAO());
+    }
+
+    /**
+     * Constructor με dependency injection: τα DAOs περνούν απ' έξω, ώστε στα
+     * unit tests να αντικαθίστανται από mocks (Mockito) χωρίς πραγματική βάση.
+     */
+    public LoginController(MainFrame mainFrame, LoginView loginView, UserDAO userDAO, AuditLogDAO auditLogDAO) {
         this.mainFrame = mainFrame;
         this.loginView = loginView;
-        this.userDAO = new UserDAO();
-        this.auditLogDAO = new AuditLogDAO();
+        this.userDAO = userDAO;
+        this.auditLogDAO = auditLogDAO;
 
         this.loginView.addLoginListener(new LoginActionListener());
         this.loginView.addForgotPasswordListener(new ForgotPasswordActionListener());
