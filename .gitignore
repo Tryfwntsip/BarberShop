@@ -17,7 +17,7 @@ target/
 report.csv
 kourio_report*.csv
 
-# Local artifacts (deps resolved via Maven; SRS kept as .docx)
+# Local artifacts (dependencies are resolved via Maven)
 libs/
 *.pages
 AGENTS.md

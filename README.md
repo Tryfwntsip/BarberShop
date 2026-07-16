@@ -1,5 +1,8 @@
 # BarberShop
 
+[![CI](https://github.com/Tryfwntsip/BarberShop/actions/workflows/ci.yml/badge.svg)](https://github.com/Tryfwntsip/BarberShop/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 Σύστημα διαχείρισης ραντεβού για κουρείο — desktop εφαρμογή σε **Java 17 / Swing** με αρχιτεκτονική **MVC** και βάση **MySQL**.
 
 ## Χαρακτηριστικά
@@ -19,18 +22,22 @@ Java 17 · Swing · FlatLaf · MySQL 8 (JDBC) · jBCrypt · Maven · JUnit 5
 ## Εκκίνηση
 
 ### 1. Βάση δεδομένων
+
 ```bash
 mysql -u root -p < schema.sql      # δημιουργεί τη βάση kourio_db με demo δεδομένα
 ```
 
 ### 2. Στοιχεία σύνδεσης (δεν αποθηκεύονται στον κώδικα)
+
 Όρισε τον κωδικό της MySQL μέσω μεταβλητής περιβάλλοντος:
+
 ```bash
 export KOURIO_DB_PASSWORD="ο_κωδικός_σου"
 # προαιρετικά: KOURIO_DB_URL, KOURIO_DB_USER
 ```
 
 ### 3. Build & Run
+
 ```bash
 mvn compile
 mvn test        # unit tests (JUnit 5) — δεν απαιτούν βάση δεδομένων
@@ -42,11 +49,14 @@ java -cp "target/classes:$(cat cp.txt)" com.kourio.views.MainFrame
 
 Όλοι έχουν κωδικό `password123` (seed data):
 
-| Ρόλος       | Username    |
-|-------------|-------------|
-| Ιδιοκτήτης  | `admin`     |
-| Κουρέας     | `barber1`   |
-| Πελάτης     | `customer1` |
+| Ρόλος      | Username    |
+| ---------- | ----------- |
+| Ιδιοκτήτης | `admin`     |
+| Κουρέας    | `barber1`   |
+| Πελάτης    | `customer1` |
+
+Οι demo λογαριασμοί και τα στοιχεία πελατών είναι αποκλειστικά για τοπική
+ανάπτυξη. Αλλάξτε ή αφαιρέστε τα πριν από οποιαδήποτε πραγματική εγκατάσταση.
 
 ## Δομή
 
@@ -57,3 +67,12 @@ src/main/java/com/kourio/
 ├── views/        # Swing UI (login + dashboards, FlatLaf theming)
 └── controllers/  # MVC controllers ανά ρόλο
 ```
+
+## Συνεισφορά και ασφάλεια
+
+Δείτε το [CONTRIBUTING.md](CONTRIBUTING.md) πριν από αλλαγές. Πιθανά θέματα
+ασφαλείας αναφέρονται ιδιωτικά σύμφωνα με το [SECURITY.md](SECURITY.md).
+
+## Άδεια
+
+Διατίθεται με την [MIT License](LICENSE).
