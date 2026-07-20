@@ -19,7 +19,7 @@
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
-            <version>3.5.4</version>
+            <version>3.7.2</version>
         </dependency>
 
         <!-- MySQL JDBC Connector -->
